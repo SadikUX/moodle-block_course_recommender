@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+use core\output\html_writer;
+
 /**
  * Block block_course_recommender
  * This block allows users to select their interests from a list of tags.
@@ -37,6 +39,18 @@ class block_course_recommender extends block_base {
     }
 
     /**
+     * Get the course image URL
+     *
+     * @param stdClass $course
+     * @return string image url
+     */
+    protected function get_course_image_url($course) {
+        global $OUTPUT;
+
+        return $OUTPUT->get_generated_image_for_id($course->id);
+    }
+
+    /**
      * Returns the content of the block.
      *
      * This method generates the HTML content displayed within the block.
@@ -53,6 +67,9 @@ class block_course_recommender extends block_base {
 
         $this->content = new stdClass();
         $this->content->text = '';
+
+        // Setup the AMD module.
+        $this->page->requires->js_call_amd('block_course_recommender/recommender', 'init');
 
         // Get all tags that can be used for courses.
         // This assumes that tags are used for courses in the system.
@@ -71,13 +88,12 @@ class block_course_recommender extends block_base {
             $interests[] = $tag->rawname;
         }
 
-        // Form values from POST and check with sesskey for security.
         if (empty($interests)) {
             $this->content->text .= html_writer::tag('p', get_string('notagsfound', 'block_course_recommender'));
             return $this->content;
         }
         $selected = [];
-        if (!empty($_POST) && optional_param('sesskey', '', PARAM_RAW) && confirm_sesskey()) {
+        if (!empty($_POST)) {
             $selected = optional_param_array('interests', [], PARAM_RAW);
         }
 
@@ -87,122 +103,35 @@ class block_course_recommender extends block_base {
             'action' => '',
             'id' => 'courserecommender-form',
         ]);
-        // Sesskey as hidden input for security.
-        $formhtml .= html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
 
-        $formhtml .= html_writer::tag('label', get_string('interest_label', 'block_course_recommender'));
-        $formhtml .= html_writer::start_tag('div');
+        $formhtml .= html_writer::tag('label', get_string('interest_label', 'block_course_recommender'),
+            ['class' => 'tags-container']);
+        $formhtml .= html_writer::start_tag('div', ['class' => 'tags-container']);
 
         foreach ($interests as $interest) {
-            $attributes = ['type' => 'checkbox', 'name' => 'interests[]', 'value' => $interest, 'class' => 'custom-checkbox'];
+            $attributes = [
+                'type' => 'checkbox',
+                'name' => 'interests[]',
+                'value' => $interest,
+                'class' => 'interest-toggle',
+                'id' => 'interest-' . clean_param($interest, PARAM_ALPHANUMEXT),
+            ];
             if (in_array($interest, $selected)) {
                 $attributes['checked'] = 'checked';
             }
+            $formhtml .= html_writer::empty_tag('input', $attributes);
             $formhtml .= html_writer::tag(
                 'label',
-                html_writer::empty_tag('input', $attributes) . ' ' . s($interest),
-                ['class' => 'courserecommender-interests']
+                s($interest),
+                ['class' => 'courserecommender-interest-tag', 'for' => 'interest-' . clean_param($interest, PARAM_ALPHANUMEXT)]
             );
         }
-
-        $formhtml .= html_writer::start_div('submit-wrapper'); // Wrapper div for submit button.
-
-        $formhtml .= html_writer::empty_tag('input', [
-            'type'  => 'submit',
-            'value' => get_string('submit', 'block_course_recommender'),
-            'class' => 'btn btn-primary courserecommender-submit',
-        ]);
-
-        $formhtml .= html_writer::end_div();
-
+        $formhtml .= html_writer::end_tag('div');
         $formhtml .= html_writer::end_tag('form');
 
         $this->content->text .= $formhtml;
         $this->content->text .= html_writer::start_div('courserecommender-results') . html_writer::end_div();
 
-        // If user has selected interests, show matching courses.
-        if (!empty($selected)) {
-            $this->content->text .= html_writer::tag('h4', get_string('matchingcourses', 'block_course_recommender'));
-
-            $courses = $this->find_courses_by_tags($selected);
-
-            if (empty($courses)) {
-                $this->content->text .= html_writer::tag('p', get_string('nocourses', 'block_course_recommender'));
-            } else {
-                global $OUTPUT;
-
-                $tiles = [];
-                foreach ($courses as $course) {
-                    $image = \core_course\external\course_summary_exporter::get_course_image($course);
-                    if (!$image) {
-                        $image = 'https://picsum.photos/400/200?random=' . $course->id;
-                    }
-
-                    $url = new moodle_url('/course/view.php', ['id' => $course->id]);
-                    $title = format_string($course->fullname);
-
-                    $tiles[] = html_writer::start_div('courserecommender-tile card')
-                        . html_writer::start_tag('a', ['href' => $url, 'class' => 'courserecommender-link'])
-                        . html_writer::empty_tag('img', [
-                            'src' => $image,
-                            'class' => 'card-img-top courserecommender-img',
-                            'alt' => $title,
-                        ])
-                        . html_writer::start_div('card-body')
-                        . html_writer::tag('h5', $title, ['class' => 'card-title courserecommender-title'])
-                        . html_writer::end_div()
-                        . html_writer::end_tag('a')
-                        . html_writer::end_div();
-                }
-
-                $this->content->text .= html_writer::start_div('courserecommender-tiles')
-                    . implode('', $tiles)
-                    . html_writer::end_div();
-            }
-        }
-
         return $this->content;
-    }
-
-    /**
-     * Finds courses that are associated with the given tags.
-     *
-     * This method searches the database for courses that are tagged
-     * with any of the specified tag names.
-     *
-     * @param array $tags List of tag names to filter courses by.
-     * @return array List of matching course objects or records.
-     */
-    private function find_courses_by_tags(array $tags) {
-        global $DB, $USER;
-
-        // Tags to ids mapping.
-        list($insql, $params) = $DB->get_in_or_equal($tags, SQL_PARAMS_NAMED, 'tag0');
-
-        $tagrecords = $DB->get_records_select('tag', "name $insql", $params);
-        if (empty($tagrecords)) {
-            return [];
-        }
-        $tagids = array_keys($tagrecords);
-
-        $tagidssql = implode(',', array_map('intval', $tagids));
-
-        // SQL to find courses with the selected tags.
-        // This assumes that the tags are used for courses in the system.
-        // If you have a different tagging system, adjust accordingly.
-        $sql = "
-            SELECT c.*
-            FROM {course} c
-            JOIN {tag_instance} ti ON ti.itemid = c.id
-            WHERE ti.tagid IN ($tagidssql)
-            AND ti.itemtype = 'course'
-            AND ti.component = 'core'
-            AND c.visible = 1
-            GROUP BY c.id
-            ORDER BY c.fullname ASC
-            LIMIT 20
-        ";
-
-        return $DB->get_records_sql($sql);
     }
 }

@@ -19,22 +19,22 @@
  *
  * @package    block_course_recommender
  * @category   string
- * @copyright  2025 2025 Sadik Mert
+ * @copyright  2025 Sadik Mert
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-
 $string['course_recommender:addinstance'] = 'Füge einen neuen Kurs-Empfehlungsblock hinzu';
 $string['course_recommender:myaddinstance'] = 'Füge einen neuen Kurs-Empfehlungsblock zu Mein Moodle hinzu';
+$string['course_recommender:view'] = 'Kurs-Empfehlungsblock anzeigen';
 
 $string['interest_label'] = 'Wähle deine Interessen';
 
 $string['matchingcourses'] = 'Kurse, die zu deinen Interessen passen';
 
 $string['nocourses'] = 'Keine passenden Kurse gefunden.';
+$string['notagsfound'] = 'Keine Tags für Kurse verfügbar.';
 
 $string['pluginname'] = 'Kurs-Empfehlung';
-
-$string['submit'] = 'Zeige Empfehlungen';
+$string['privacy:metadata'] = 'Der Kurs-Empfehlungsblock speichert keine personenbezogenen Daten.';

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/course_recommender/db" VERSION="20250720" COMMENT="XMLDB file for Moodle blocks/course_recommender">
+    <TABLES>
+    </TABLES>
+</XMLDB>

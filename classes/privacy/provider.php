@@ -20,7 +20,7 @@ namespace block_course_recommender\privacy;
  * Class provider
  *
  * @package    block_course_recommender
- * @copyright  2025 2025 Sadik Mert
+ * @copyright  2025 Sadik Mert
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider {

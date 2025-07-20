@@ -19,12 +19,11 @@
  *
  * @package    block_course_recommender
  * @category   string
- * @copyright  2025 2025 Sadik Mert
+ * @copyright  2025 Sadik Mert
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-
 
 $string['course_recommender:addinstance'] = 'Add a new Course Recommender block';
 $string['course_recommender:myaddinstance'] = 'Add a new Course Recommender block to My home';
@@ -35,8 +34,7 @@ $string['interest_label'] = 'Select your interests';
 $string['matchingcourses'] = 'Courses matching your interests';
 
 $string['nocourses'] = 'No matching courses found.';
+$string['notagsfound'] = 'No tags available for courses.';
 
 $string['pluginname'] = 'Course Recommender';
-$string['privacy:metadata'] = 'The Top Active Courses plugin does not store any personal data.';
-
-$string['submit'] = 'Show courses';
+$string['privacy:metadata'] = 'The Course Recommender block does not store any personal data.';

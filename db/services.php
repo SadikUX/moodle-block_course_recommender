@@ -15,38 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Capability definitions for block_course_recommender
+ * Course recommender external services definitions
  *
  * @package    block_course_recommender
- * @category   access
  * @copyright  2025 Sadik Mert
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = [
-    'block/course_recommender:view' => [
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => [
-            'user' => CAP_ALLOW,
-            'guest' => CAP_PREVENT,
-        ],
-    ],
-    'block/course_recommender:addinstance' => [
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => [
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-        ],
-    ],
-    'block/course_recommender:myaddinstance' => [
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => [
-            'user' => CAP_ALLOW,
-        ],
+$functions = [
+    'block_course_recommender_get_courses' => [
+        'classname'     => 'block_course_recommender\external',
+        'methodname'    => 'get_courses',
+        'description'   => 'Get recommended courses based on selected interests',
+        'type'         => 'read',
+        'ajax'         => true,
+        'capabilities' => '',
+        'loginrequired' => true,
     ],
 ];
