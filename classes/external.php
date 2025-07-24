@@ -106,7 +106,6 @@ class external extends external_api {
         }
 
         $tagids = array_keys($tagrecords);
-        // Use two different prefixes for get_in_or_equal.
         list($tagidssql, $tagidparams) = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag');
         list($tagidssql2, $tagidparams2) = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag2');
         $sql = "
@@ -134,46 +133,33 @@ class external extends external_api {
         $params = array_merge($tagidparams, $tagidparams2);
         $courses = $DB->get_records_sql($sql, $params);
 
-        // Generate HTML.
-        $html = '<h4 class="courserecommender-tags-container">' . get_string('matchingcourses', 'block_course_recommender') . '</h4>';
-
-        if (empty($courses)) {
-            $html .= '<div class="alert alert-info">' . get_string('nocourses', 'block_course_recommender') . '</div>';
-        } else {
-            $html .= '<div class="courserecommender-tiles">';
+        $data = [
+            'matchingcourses' => get_string('matchingcourses', 'block_course_recommender'),
+            'nocourses' => get_string('nocourses', 'block_course_recommender'),
+        ];
+        if (!empty($courses)) {
+            $data['courses'] = [
+                'list' => [],
+            ];
             foreach ($courses as $course) {
                 $url = new \moodle_url('/course/view.php', ['id' => $course->id]);
                 $title = format_string($course->fullname);
-
-                $course = new \core_course_list_element($course);
-                $image = \core_course\external\course_summary_exporter::get_course_image($course);
+                $courseobj = new \core_course_list_element($course);
+                $image = \core_course\external\course_summary_exporter::get_course_image($courseobj);
                 if (empty($image)) {
                     $image = 'https://picsum.photos/400/200?random=' . $course->id;
                 }
-                $html .= '
-                    <div class="courserecommender-tile card">
-                        <a href="' . $url . '" class="courserecommender-link">
-                            <img src="' . $image . '"
-                                 class="card-img-top courserecommender-img"
-                                 alt="' . $title . '">
-                            <div class="card-body">
-                                <h5 class="card-title courserecommender-title">' . $title . '</h5>
-                                <div class="courserecommender-tags">';
-
-                // Add tags.
-                $tags = explode(',', $course->tagnames);
-                foreach ($tags as $tag) {
-                    $html .= '<span class="badge badge-info mr-1">' . s(trim($tag)) . '</span>';
-                }
-
-                $html .= '    </div>
-                            </div>
-                        </a>
-                    </div>';
+                $tags = array_map('trim', explode(',', $course->tagnames));
+                $data['courses']['list'][] = [
+                    'url' => $url->out(false),
+                    'title' => $title,
+                    'image' => $image,
+                    'tags' => $tags,
+                ];
             }
-            $html .= '</div>';
         }
-
+        global $OUTPUT;
+        $html = $OUTPUT->render_from_template('block_course_recommender/courses', $data);
         return ['html' => $html];
     }
 }

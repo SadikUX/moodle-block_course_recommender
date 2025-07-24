@@ -1,0 +1,51 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_course_recommender/tagform
+
+    This template renders the tag selection form for the course recommender block.
+    Shows all tags as checkboxes and provides all tags for JS autocomplete.
+
+    Context variables required for this template:
+        * interestlabel - string (localized label)
+        * tags - array of tag objects
+            * name - string (tag name)
+            * checked - bool
+            * id - string (unique id)
+        * all_tags_json - JSON array of all tag names (for JS autocomplete)
+    Example context (json):
+    {
+        "interestlabel": "Select your interests:",
+        "tags": [
+            {"name": "Tag1", "checked": true, "id": "interest-Tag1"},
+            {"name": "Tag2", "checked": false, "id": "interest-Tag2"}
+        ],
+        "all_tags_json": ["Tag1", "Tag2", "Tag3", "Tag4"]
+    }
+}}
+<form method="post" action="" id="courserecommender-form">
+    <label class="courserecommender-tags-container">{{interestlabel}}</label>
+    <div class="courserecommender-tags-container">
+        {{#tags}}
+        <input type="checkbox" name="interests[]" value="{{name}}" class="courserecommender-interest-toggle" id="{{id}}" {{#checked}}checked{{/checked}}>
+        <label class="courserecommender-interest-tag" for="{{id}}">{{name}}</label>
+        {{/tags}}
+    </div>
+</form>
+<script>
+    window.courserecommenderAllTags = {{{ all_tags_json }}};
+</script>

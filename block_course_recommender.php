@@ -95,41 +95,22 @@ class block_course_recommender extends block_base {
             $selected = optional_param_array('interests', [], PARAM_RAW);
         }
 
-        // Building the form HTML.
-        $formhtml = html_writer::start_tag('form', [
-            'method' => 'post',
-            'action' => '',
-            'id' => 'courserecommender-form',
-        ]);
-
-        $formhtml .= html_writer::tag('label', get_string('interest_label', 'block_course_recommender'),
-            ['class' => 'courserecommender-tags-container']);
-        $formhtml .= html_writer::start_tag('div', ['class' => 'courserecommender-tags-container']);
-
-        foreach ($interests as $interest) {
-            $attributes = [
-                'type' => 'checkbox',
-                'name' => 'interests[]',
-                'value' => $interest,
-                'class' => 'courserecommender-interest-toggle',
-                'id' => 'interest-' . clean_param($interest, PARAM_ALPHANUMEXT),
+        // Prepare data for Mustache template.
+        $tagsdata = [];
+        foreach ($interests as $tagname) {
+            $tagsdata[] = [
+                'name' => $tagname,
+                'checked' => in_array($tagname, $selected),
+                'id' => 'interest-' . clean_param($tagname, PARAM_ALPHANUMEXT)
             ];
-            if (in_array($interest, $selected)) {
-                $attributes['checked'] = 'checked';
-            }
-            $formhtml .= html_writer::empty_tag('input', $attributes);
-            $formhtml .= html_writer::tag(
-                'label',
-                s($interest),
-                ['class' => 'courserecommender-interest-tag', 'for' => 'interest-' . clean_param($interest, PARAM_ALPHANUMEXT)]
-            );
         }
-        $formhtml .= html_writer::end_tag('div');
-        $formhtml .= html_writer::end_tag('form');
-
-        $this->content->text .= $formhtml;
+        $data = [
+            'interestlabel' => get_string('interest_label', 'block_course_recommender'),
+            'tags' => $tagsdata,
+            'all_tags_json' => json_encode($interests)
+        ];
+        $this->content->text .= $OUTPUT->render_from_template('block_course_recommender/tagform', $data);
         $this->content->text .= html_writer::start_div('courserecommender-results') . html_writer::end_div();
-
         return $this->content;
     }
 }
