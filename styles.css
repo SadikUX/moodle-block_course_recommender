@@ -119,14 +119,14 @@
     }
 }
 
-.tags-container {
+.courserecommender-tags-container {
     padding: 1rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.interest-toggle {
+.courserecommender-interest-toggle {
     position: absolute;
     opacity: 0;
     width: 0;

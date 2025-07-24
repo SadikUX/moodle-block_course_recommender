@@ -134,7 +134,7 @@ class external extends external_api {
         $courses = $DB->get_records_sql($sql);
 
         // Generate HTML.
-        $html = '<h4 class="tags-container">' . get_string('matchingcourses', 'block_course_recommender') . '</h4>';
+        $html = '<h4 class="courserecommender-tags-container">' . get_string('matchingcourses', 'block_course_recommender') . '</h4>';
 
         if (empty($courses)) {
             $html .= '<div class="alert alert-info">' . get_string('nocourses', 'block_course_recommender') . '</div>';

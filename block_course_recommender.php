@@ -105,15 +105,15 @@ class block_course_recommender extends block_base {
         ]);
 
         $formhtml .= html_writer::tag('label', get_string('interest_label', 'block_course_recommender'),
-            ['class' => 'tags-container']);
-        $formhtml .= html_writer::start_tag('div', ['class' => 'tags-container']);
+            ['class' => 'courserecommender-tags-container']);
+        $formhtml .= html_writer::start_tag('div', ['class' => 'courserecommender-tags-container']);
 
         foreach ($interests as $interest) {
             $attributes = [
                 'type' => 'checkbox',
                 'name' => 'interests[]',
                 'value' => $interest,
-                'class' => 'interest-toggle',
+                'class' => 'courserecommender-interest-toggle',
                 'id' => 'interest-' . clean_param($interest, PARAM_ALPHANUMEXT),
             ];
             if (in_array($interest, $selected)) {
