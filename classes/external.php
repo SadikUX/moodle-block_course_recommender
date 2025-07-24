@@ -79,6 +79,8 @@ class external extends external_api {
         // Set up the page context.
         $context = context_system::instance();
         $PAGE->set_context($context);
+        self::validate_context($context);
+        require_capability('moodle/course:view', $context);
 
         $params = self::validate_parameters(self::get_courses_parameters(), [
             'interests' => $interests,
