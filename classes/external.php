@@ -106,22 +106,21 @@ class external extends external_api {
         }
 
         $tagids = array_keys($tagrecords);
-        $tagidssql = implode(',', array_map('intval', $tagids));
-
-        // Get matching courses with ALL their tags.
+        // Use two different prefixes for get_in_or_equal.
+        list($tagidssql, $tagidparams) = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag');
+        list($tagidssql2, $tagidparams2) = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag2');
         $sql = "
             WITH matching_courses AS (
                 SELECT DISTINCT c.id
                 FROM {course} c
                 JOIN {tag_instance} ti ON ti.itemid = c.id
-                WHERE ti.tagid IN ($tagidssql)
+                WHERE ti.tagid $tagidssql
                 AND ti.itemtype = 'course'
                 AND ti.component = 'core'
                 AND c.visible = 1
             )
-            SELECT c.*,
-                   GROUP_CONCAT(t.rawname) as tagnames,
-                   COUNT(CASE WHEN t.id IN ($tagidssql) THEN 1 END) as matching_tags
+            SELECT c.*, GROUP_CONCAT(t.rawname) as tagnames,
+                   COUNT(CASE WHEN t.id $tagidssql2 THEN 1 END) as matching_tags
             FROM {course} c
             JOIN matching_courses mc ON mc.id = c.id
             LEFT JOIN {tag_instance} ti ON ti.itemid = c.id
@@ -132,8 +131,8 @@ class external extends external_api {
             ORDER BY matching_tags DESC, c.timecreated DESC
             LIMIT 20
         ";
-
-        $courses = $DB->get_records_sql($sql);
+        $params = array_merge($tagidparams, $tagidparams2);
+        $courses = $DB->get_records_sql($sql, $params);
 
         // Generate HTML.
         $html = '<h4 class="courserecommender-tags-container">' . get_string('matchingcourses', 'block_course_recommender') . '</h4>';

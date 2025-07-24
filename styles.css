@@ -152,18 +152,15 @@
     transform: translateY(-1px);
 }
 
-.interest-toggle:checked + .courserecommender-interest-tag {
+.courserecommender-interest-toggle:checked + .courserecommender-interest-tag {
     background-color: #0f6fc5;
     border-color: #0f6fc5;
     color: white;
 }
-
-.interest-toggle:focus + .courserecommender-interest-tag {
+.courserecommender-interest-toggle:focus + .courserecommender-interest-tag {
     box-shadow: 0 0 0 0.2rem rgba(15, 111, 197, 0.25);
 }
-
-/* Accessibility */
-.interest-toggle:focus-visible + .courserecommender-interest-tag {
+.courserecommender-interest-toggle:focus-visible + .courserecommender-interest-tag {
     outline: 2px solid #0f6fc5;
     outline-offset: 2px;
 }

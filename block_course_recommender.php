@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-use core\output\html_writer;
-
 /**
  * Block block_course_recommender
  * This block allows users to select their interests from a list of tags.
