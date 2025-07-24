@@ -101,13 +101,13 @@ class block_course_recommender extends block_base {
             $tagsdata[] = [
                 'name' => $tagname,
                 'checked' => in_array($tagname, $selected),
-                'id' => 'interest-' . clean_param($tagname, PARAM_ALPHANUMEXT)
+                'id' => 'interest-' . clean_param($tagname, PARAM_ALPHANUMEXT),
             ];
         }
         $data = [
             'interestlabel' => get_string('interest_label', 'block_course_recommender'),
             'tags' => $tagsdata,
-            'all_tags_json' => json_encode($interests)
+            'all_tags_json' => json_encode($interests),
         ];
         $this->content->text .= $OUTPUT->render_from_template('block_course_recommender/tagform', $data);
         $this->content->text .= html_writer::start_div('courserecommender-results') . html_writer::end_div();
