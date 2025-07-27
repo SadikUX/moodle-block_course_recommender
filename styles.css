@@ -10,9 +10,11 @@
 .courserecommender-tiles::-webkit-scrollbar {
     height: 8px;
 }
+
 .courserecommender-tiles::-webkit-scrollbar-track {
     background: transparent;
 }
+
 .courserecommender-tiles::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
@@ -113,6 +115,7 @@
         flex: 0 0 75%;
     }
 }
+
 @media (max-width: 600px) {
     .courserecommender-tile.card {
         flex: 0 0 90%;
@@ -157,9 +160,11 @@
     border-color: #0f6fc5;
     color: white;
 }
+
 .courserecommender-interest-toggle:focus + .courserecommender-interest-tag {
     box-shadow: 0 0 0 0.2rem rgba(15, 111, 197, 0.25);
 }
+
 .courserecommender-interest-toggle:focus-visible + .courserecommender-interest-tag {
     outline: 2px solid #0f6fc5;
     outline-offset: 2px;

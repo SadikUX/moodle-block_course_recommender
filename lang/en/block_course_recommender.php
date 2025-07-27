@@ -29,6 +29,8 @@ $string['course_recommender:addinstance'] = 'Add a new Course Recommender block'
 $string['course_recommender:myaddinstance'] = 'Add a new Course Recommender block to My home';
 $string['course_recommender:view'] = 'View Course Recommender block';
 
+$string['error'] = 'An error occurred.';
+
 $string['interest_label'] = 'Select your interests';
 
 $string['matchingcourses'] = 'Courses matching your interests';

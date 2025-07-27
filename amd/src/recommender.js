@@ -66,11 +66,23 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
             })
             .fail(function(error) {
                 Notification.exception(error);
-                Str.get_string('error', 'block_course_recommender')
-                    .then(function(errorStr) {
-                        resultsContainer.html('<div class="alert alert-danger">' + errorStr + '</div>');
-                        return;
-                    });
+                handleAjaxError(resultsContainer);
+            });
+    }
+
+    /**
+     * Handles AJAX error and displays a localized error message.
+     * @param {jQuery} resultsContainer The results container element
+     */
+    function handleAjaxError(resultsContainer) {
+        Str.get_string('error', 'block_course_recommender')
+            .then(function(errorStr) {
+                resultsContainer.html('<div class="alert alert-danger">' + errorStr + '</div>');
+                return null;
+            })
+            .catch(function() {
+                resultsContainer.html('<div class="alert alert-danger">Error</div>');
+                return null;
             });
     }
 

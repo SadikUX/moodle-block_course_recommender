@@ -29,6 +29,8 @@ $string['course_recommender:addinstance'] = 'Füge einen neuen Kurs-Empfehlungsb
 $string['course_recommender:myaddinstance'] = 'Füge einen neuen Kurs-Empfehlungsblock zu Mein Moodle hinzu';
 $string['course_recommender:view'] = 'Kurs-Empfehlungsblock anzeigen';
 
+$string['error'] = 'Es ist ein Fehler aufgetreten.';
+
 $string['interest_label'] = 'Wähle deine Interessen';
 
 $string['matchingcourses'] = 'Kurse, die zu deinen Interessen passen';
