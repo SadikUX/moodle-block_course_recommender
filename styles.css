@@ -1,3 +1,29 @@
+.courserecommender-badge {
+    display: inline-block;
+    padding: 0.5rem 1.1rem;
+    border-radius: 2rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+    margin: 0.15em 0.2em;
+    user-select: none;
+}
+
+.courserecommender-badge.selected {
+    background-color: #0f6fc5;
+    border-color: #0f6fc5;
+    color: #fff;
+}
+
+.courserecommender-badge:not(.selected):hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    transform: translateY(-1px);
+}
+
 .courserecommender-tiles {
     display: flex;
     flex-wrap: nowrap;

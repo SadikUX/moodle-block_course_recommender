@@ -18,19 +18,34 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
             return;
         }
 
+        // Badge-Auswahl-Logik
+        form.on('click', '.courserecommender-badge', function(e) {
+            e.preventDefault();
+            $(this).toggleClass('selected');
+            updateSelectedTags(form);
+            clearTimeout(window.changeTimeout);
+            window.changeTimeout = setTimeout(function() {
+                form.submit();
+            }, 300);
+        });
+
         // Handle form submission
         form.on('submit', function(e) {
             e.preventDefault();
             updateResults(form, resultsContainer);
         });
+    }
 
-        // Handle checkbox changes
-        form.find('input[type="checkbox"]').on('change', function() {
-            clearTimeout(window.changeTimeout);
-            window.changeTimeout = setTimeout(function() {
-                form.submit();
-            }, 500);
+    /**
+     * Update the hidden input with selected tags.
+     * @param {jQuery} form The form element
+     */
+    function updateSelectedTags(form) {
+        var selected = [];
+        form.find('.courserecommender-badge.selected').each(function() {
+            selected.push($(this).data('tag'));
         });
+        form.find('#courserecommender-selected-tags').val(selected.join(','));
     }
 
     /**
@@ -43,10 +58,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
         // Show loading indicator
         resultsContainer.html('<div class="text-center"><span class="spinner-border"></span></div>');
 
-        // Get selected interests
-        var interests = form.find('input[name="interests[]"]:checked').map(function() {
-            return $(this).val();
-        }).get();
+        // Get selected interests from hidden input
+        var interests = form.find('#courserecommender-selected-tags').val();
+        interests = interests ? interests.split(',') : [];
 
         // Prepare request
         var request = {

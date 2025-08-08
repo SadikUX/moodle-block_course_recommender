@@ -25,6 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['cachedef_tags'] = 'Tag-Liste Cache';
 $string['course_recommender:addinstance'] = 'Füge einen neuen Kurs-Empfehlungsblock hinzu';
 $string['course_recommender:myaddinstance'] = 'Füge einen neuen Kurs-Empfehlungsblock zu Mein Moodle hinzu';
 $string['course_recommender:view'] = 'Kurs-Empfehlungsblock anzeigen';

@@ -25,6 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['cachedef_tags'] = 'Tag List Cache';
 $string['course_recommender:addinstance'] = 'Add a new Course Recommender block';
 $string['course_recommender:myaddinstance'] = 'Add a new Course Recommender block to My home';
 $string['course_recommender:view'] = 'View Course Recommender block';

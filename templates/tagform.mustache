@@ -41,9 +41,9 @@
     <label class="courserecommender-tags-container">{{interestlabel}}</label>
     <div class="courserecommender-tags-container">
         {{#tags}}
-        <input type="checkbox" name="interests[]" value="{{name}}" class="courserecommender-interest-toggle" id="{{id}}" {{#checked}}checked{{/checked}}>
-        <label class="courserecommender-interest-tag" for="{{id}}">{{name}}</label>
+        <span class="courserecommender-badge{{#checked}} selected{{/checked}}" data-tag="{{name}}" id="{{id}}">{{name}}</span>
         {{/tags}}
+        <input type="hidden" name="interests[]" id="courserecommender-selected-tags" value="">
     </div>
 </form>
 <script>
