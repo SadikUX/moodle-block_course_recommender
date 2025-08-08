@@ -2,6 +2,13 @@
 
 A Moodle block that helps users discover relevant courses based on their interests through an intuitive tag-based interface.
 
+## Supported Languages
+
+- English (en)
+- German (de)
+- Turkish (tr)
+- French (fr)
+
 ## Features
 
 - **Tag-Based Course Discovery**: Efficient course filtering through interest tags
@@ -76,6 +83,11 @@ Developed by Sadik Mert, 2025
 GNU GPL v3 or later - http://www.gnu.org/copyleft/gpl.html
 
 ## Changelog
+
+### Version 1.1.0 (2025-08-08)
+- Switched to clickable badges for interest selection (no checkboxes)
+- Tag list is now cached using the Moodle cache API for improved performance
+- Added Turkish (tr) and French (fr) language support
 
 ### Version 1.0.0 (2025-07-20)
 - Initial release

@@ -15,17 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for block_course_recommender
+ * Turkish language pack for block_course_recommender
  *
  * @package    block_course_recommender
+ * @category   string
  * @copyright  2025 Sadik Mert
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component    = 'block_course_recommender';
-$plugin->release      = '1.1';
-$plugin->version      = 2025080802;
-$plugin->requires     = 2022041900;
-$plugin->maturity     = MATURITY_STABLE;
+$string['cachedef_tags'] = 'Etiket listesi önbelleği';
+$string['course_recommender:addinstance'] = 'Yeni bir ders öneri bloğu ekle';
+$string['course_recommender:myaddinstance'] = 'Yeni bir ders öneri bloğunu Moodle alanıma ekle';
+$string['course_recommender:view'] = 'Ders öneri bloğunu görüntüle';
+
+$string['error'] = 'Bir hata oluştu.';
+
+$string['interest_label'] = 'İlgi alan(lar)ınızı seçin';
+
+$string['matchingcourses'] = 'İlgi alan(lar)ınıza uygun dersler';
+
+$string['nocourses'] = 'Uygun ders bulunamadı.';
+$string['notagsfound'] = 'Dersler için etiket bulunamadı.';
+
+$string['pluginname'] = 'Ders önerisi';
+$string['privacy:metadata'] = 'Ders öneri bloğu herhangi bir kişisel veri saklamaz.';

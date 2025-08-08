@@ -69,19 +69,19 @@ class block_course_recommender extends block_base {
         // Setup the AMD module.
         $this->page->requires->js_call_amd('block_course_recommender/recommender', 'init');
 
-            // Moodle Caching für die Tag-Liste nutzen.
-            $cache = \cache::make_from_params(\cache_store::MODE_APPLICATION, 'block_course_recommender', 'tags');
-            $tags = $cache->get('alltags');
-            if ($tags === false) {
-                $tags = $DB->get_records_sql("
-                    SELECT DISTINCT t.id, t.name, t.rawname
-                    FROM {tag} t
-                    JOIN {tag_instance} ti ON ti.tagid = t.id
-                    WHERE ti.itemtype = 'course' AND ti.component = 'core'
-                    ORDER BY t.name ASC
-                ");
-                $cache->set('alltags', $tags);
-            }
+        // Moodle Caching für die Tag-Liste nutzen.
+        $cache = \cache::make_from_params(\cache_store::MODE_APPLICATION, 'block_course_recommender', 'tags');
+        $tags = $cache->get('alltags');
+        if ($tags === false) {
+            $tags = $DB->get_records_sql("
+                SELECT DISTINCT t.id, t.name, t.rawname
+                FROM {tag} t
+                JOIN {tag_instance} ti ON ti.tagid = t.id
+                WHERE ti.itemtype = 'course' AND ti.component = 'core'
+                ORDER BY t.name ASC
+            ");
+            $cache->set('alltags', $tags);
+        }
 
         // Array with tag names.
         $interests = [];
