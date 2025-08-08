@@ -72,3 +72,9 @@ jobs:
 
       - name: Check savepoints
         run: moodle-plugin-ci savepoints ./plugin
+      
+      - name: Mustache Template Check
+        run: moodle-plugin-ci mustache ./plugin || true
+
+      - name: Grunt
+        run: moodle-plugin-ci grunt ./plugin || true
