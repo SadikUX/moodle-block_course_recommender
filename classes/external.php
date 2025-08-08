@@ -37,7 +37,6 @@ use moodle_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class external extends external_api {
-
     /**
      * Returns description of get_courses parameters
      *
@@ -98,7 +97,9 @@ class external extends external_api {
         }
 
         // Tags to ids mapping.
-        list($insql, $inparams) = $DB->get_in_or_equal($params['interests'], SQL_PARAMS_NAMED, 'tag');
+        $in = $DB->get_in_or_equal($params['interests'], SQL_PARAMS_NAMED, 'tag');
+        $insql = $in[0];
+        $inparams = $in[1];
         $tagrecords = $DB->get_records_select('tag', "rawname $insql", $inparams);
 
         if (empty($tagrecords)) {
@@ -106,8 +107,12 @@ class external extends external_api {
         }
 
         $tagids = array_keys($tagrecords);
-        list($tagidssql, $tagidparams) = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag');
-        list($tagidssql2, $tagidparams2) = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag2');
+        $in1 = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag');
+        $tagidssql = $in1[0];
+        $tagidparams = $in1[1];
+        $in2 = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag2');
+        $tagidssql2 = $in2[0];
+        $tagidparams2 = $in2[1];
         $sql = "
             WITH matching_courses AS (
                 SELECT DISTINCT c.id
