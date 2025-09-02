@@ -72,6 +72,10 @@ For support or to contribute to the development:
 - Submit pull requests for improvements
 - Contact: sadikmert@hotmail.de
 
+### Feedback
+
+I would greatly appreciate any feedback from users – ideas, suggestions, challenges, or any issues you encounter. Your input will help improve the plugin and guide future features.
+
 ## Credits
 
 Developed by Sadik Mert, 2025
@@ -84,6 +88,11 @@ GNU GPL v3 or later - http://www.gnu.org/copyleft/gpl.html
 
 ## Changelog
 
+### Version 1.2.0 (2025-09-02)
+Improve tag selection UI and card filtering
+- Made the tag selection area horizontally scrollable for better usability with many tags.
+- Updated cards to display only the tags that are currently selected in the tag filter.
+
 ### Version 1.1.0 (2025-08-08)
 - Switched to clickable badges for interest selection (no checkboxes)
 - Tag list is now cached using the Moodle cache API for improved performance
@@ -95,3 +104,8 @@ GNU GPL v3 or later - http://www.gnu.org/copyleft/gpl.html
 - Responsive design
 - Real-time updates
 - Course image support
+
+## Planned Features
+- Limit the number of initial tags displayed. For example, show only X tags by default and allow the user to reveal more if desired. The initial count and the number of additional tags shown can be configured by admins in `settings.php` (not yet implemented).
+- Add a search function to allow users to search for specific tags, which is especially useful when a large number of tags are used on a page. This will also be configurable in `settings.php` (not yet implemented).
+- Allow customization of tag colors so they can match the company's corporate design. This will also be configurable in `settings.php` (not yet implemented).

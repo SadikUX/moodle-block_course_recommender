@@ -135,8 +135,8 @@ class external extends external_api {
             ORDER BY matching_tags DESC, c.timecreated DESC
             LIMIT 20
         ";
-        $params = array_merge($tagidparams, $tagidparams2);
-        $courses = $DB->get_records_sql($sql, $params);
+        $sqlparams = array_merge($tagidparams, $tagidparams2);
+        $courses = $DB->get_records_sql($sql, $sqlparams);
 
         $data = [
             'matchingcourses' => get_string('matchingcourses', 'block_course_recommender'),
@@ -146,6 +146,8 @@ class external extends external_api {
             $data['courses'] = [
                 'list' => [],
             ];
+            // Prepare selected interests for case-insensitive matching.
+            $selectedinterests = array_map('mb_strtolower', array_map('trim', $params['interests']));
             foreach ($courses as $course) {
                 $url = new \moodle_url('/course/view.php', ['id' => $course->id]);
                 $title = format_string($course->fullname);
@@ -154,7 +156,16 @@ class external extends external_api {
                 if (empty($image)) {
                     $image = 'https://picsum.photos/400/200?random=' . $course->id;
                 }
-                $tags = array_map('trim', explode(',', $course->tagnames));
+                // Filter the course tags so only those selected as interests are returned.
+                $tags = [];
+                if (!empty($course->tagnames)) {
+                    $rawtags = array_map('trim', explode(',', $course->tagnames));
+                    foreach ($rawtags as $t) {
+                        if (in_array(mb_strtolower($t), $selectedinterests, true)) {
+                            $tags[] = $t;
+                        }
+                    }
+                }
                 $data['courses']['list'][] = [
                     'url' => $url->out(false),
                     'title' => $title,
