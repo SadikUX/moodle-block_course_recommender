@@ -14,7 +14,8 @@
     margin-left: auto;
 }
 
-.show-all-tags-btn:hover, .show-all-tags-btn:focus {
+.show-all-tags-btn:hover,
+.show-all-tags-btn:focus {
     color: var(--cr-badge-color);
     text-decoration: none;
     outline: none;

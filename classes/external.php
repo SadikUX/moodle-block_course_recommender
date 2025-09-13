@@ -73,9 +73,9 @@ class external extends external_api {
      * @return array
      */
     public static function get_courses($interests, $sesskey) {
-        global $DB, $PAGE;
+        global $PAGE, $OUTPUT;
 
-        // Set up the page context.
+        // Context and parameters validation.
         $context = context_system::instance();
         $PAGE->set_context($context);
         self::validate_context($context);
@@ -86,27 +86,61 @@ class external extends external_api {
             'sesskey' => $sesskey,
         ]);
 
-        // Validate session key.
         if (!confirm_sesskey($params['sesskey'])) {
             throw new moodle_exception('invalidsesskey', 'error');
         }
 
-        // Find courses.
         if (empty($params['interests'])) {
             return ['html' => ''];
         }
 
-        // Tags to ids mapping.
-        $in = $DB->get_in_or_equal($params['interests'], SQL_PARAMS_NAMED, 'tag');
-        $insql = $in[0];
-        $inparams = $in[1];
-        $tagrecords = $DB->get_records_select('tag', "rawname $insql", $inparams);
-
-        if (empty($tagrecords)) {
+        $tagids = self::get_tag_ids_by_rawnames($params['interests']);
+        if (empty($tagids)) {
             return ['html' => '<div class="alert alert-info">' . get_string('nocourses', 'block_course_recommender') . '</div>'];
         }
 
-        $tagids = array_keys($tagrecords);
+        $courses = self::find_matching_courses($tagids);
+        $selectedinterests = array_map('mb_strtolower', array_map('trim', $params['interests']));
+        $courselist = self::prepare_course_list_data($courses, $selectedinterests);
+
+        $data = [
+            'matchingcourses' => get_string('matchingcourses', 'block_course_recommender'),
+            'nocourses' => get_string('nocourses', 'block_course_recommender'),
+            'tagcolor' => self::get_tagcolor(),
+        ];
+        if (!empty($courselist)) {
+            $data['courses'] = [
+                'list' => $courselist,
+            ];
+        }
+        $html = $OUTPUT->render_from_template('block_course_recommender/courses', $data);
+        return ['html' => $html];
+    }
+
+    /**
+     * Get tag IDs by their raw names.
+     * @param array $interests
+     * @return array
+     */
+    protected static function get_tag_ids_by_rawnames($interests) {
+        global $DB;
+        $in = $DB->get_in_or_equal($interests, SQL_PARAMS_NAMED, 'tag');
+        $insql = $in[0];
+        $inparams = $in[1];
+        $tagrecords = $DB->get_records_select('tag', "rawname $insql", $inparams);
+        if (empty($tagrecords)) {
+            return [];
+        }
+        return array_keys($tagrecords);
+    }
+
+    /**
+     * Find matching courses for the tag IDs.
+     * @param array $tagids
+     * @return array
+     */
+    protected static function find_matching_courses($tagids) {
+        global $DB;
         $in1 = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag');
         $tagidssql = $in1[0];
         $tagidparams = $in1[1];
@@ -136,51 +170,54 @@ class external extends external_api {
             LIMIT 20
         ";
         $sqlparams = array_merge($tagidparams, $tagidparams2);
-        $courses = $DB->get_records_sql($sql, $sqlparams);
+        return $DB->get_records_sql($sql, $sqlparams);
+    }
 
+    /**
+     * Prepare course data for the template.
+     * @param array $courses
+     * @param array $selectedinterests
+     * @return array
+     */
+    protected static function prepare_course_list_data($courses, $selectedinterests) {
+        $list = [];
+        foreach ($courses as $course) {
+            $url = new \moodle_url('/course/view.php', ['id' => $course->id]);
+            $title = format_string($course->fullname);
+            $courseobj = new \core_course_list_element($course);
+            $image = \core_course\external\course_summary_exporter::get_course_image($courseobj);
+            if (empty($image)) {
+                $image = 'https://picsum.photos/400/200?random=' . $course->id;
+            }
+            // Filter the course tags so only those selected as interests are returned.
+            $tags = [];
+            if (!empty($course->tagnames)) {
+                $rawtags = array_map('trim', explode(',', $course->tagnames));
+                foreach ($rawtags as $t) {
+                    if (in_array(mb_strtolower($t), $selectedinterests, true)) {
+                        $tags[] = $t;
+                    }
+                }
+            }
+            $list[] = [
+                'url' => $url->out(false),
+                'title' => $title,
+                'image' => $image,
+                'tags' => $tags,
+            ];
+        }
+        return $list;
+    }
+
+    /**
+     * Returns the tag color from the settings.
+     * @return string
+     */
+    protected static function get_tagcolor() {
         $tagcolor = get_config('block_course_recommender', 'tagcolor');
         if (empty($tagcolor)) {
             $tagcolor = '#0f6fc5';
         }
-        $data = [
-            'matchingcourses' => get_string('matchingcourses', 'block_course_recommender'),
-            'nocourses' => get_string('nocourses', 'block_course_recommender'),
-            'tagcolor' => $tagcolor,
-        ];
-        if (!empty($courses)) {
-            $data['courses'] = [
-                'list' => [],
-            ];
-            // Prepare selected interests for case-insensitive matching.
-            $selectedinterests = array_map('mb_strtolower', array_map('trim', $params['interests']));
-            foreach ($courses as $course) {
-                $url = new \moodle_url('/course/view.php', ['id' => $course->id]);
-                $title = format_string($course->fullname);
-                $courseobj = new \core_course_list_element($course);
-                $image = \core_course\external\course_summary_exporter::get_course_image($courseobj);
-                if (empty($image)) {
-                    $image = 'https://picsum.photos/400/200?random=' . $course->id;
-                }
-                // Filter the course tags so only those selected as interests are returned.
-                $tags = [];
-                if (!empty($course->tagnames)) {
-                    $rawtags = array_map('trim', explode(',', $course->tagnames));
-                    foreach ($rawtags as $t) {
-                        if (in_array(mb_strtolower($t), $selectedinterests, true)) {
-                            $tags[] = $t;
-                        }
-                    }
-                }
-                $data['courses']['list'][] = [
-                    'url' => $url->out(false),
-                    'title' => $title,
-                    'image' => $image,
-                    'tags' => $tags,
-                ];
-            }
-        }
-        global $OUTPUT;
-        $html = $OUTPUT->render_from_template('block_course_recommender/courses', $data);
-        return ['html' => $html];
+        return $tagcolor;
     }
 }

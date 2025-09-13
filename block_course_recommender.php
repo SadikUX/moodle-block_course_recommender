@@ -57,7 +57,7 @@ class block_course_recommender extends block_base {
      * @return stdClass The block content object.
      */
     public function get_content() {
-        global $OUTPUT, $DB;
+        global $OUTPUT;
 
         if ($this->content !== null) {
             return $this->content;
@@ -69,7 +69,34 @@ class block_course_recommender extends block_base {
         // Setup the AMD module.
         $this->page->requires->js_call_amd('block_course_recommender/recommender', 'init');
 
-        // Use Moodle Caching for the tag list.
+        $tags = $this->load_tags();
+        $interests = $this->extract_tag_names($tags);
+
+        if (empty($interests)) {
+            $this->content->text .= html_writer::tag('p', get_string('notagsfound', 'block_course_recommender'));
+            return $this->content;
+        }
+
+        $selected = [];
+        if (!empty($_POST)) {
+            $selected = optional_param_array('interests', [], PARAM_RAW);
+        }
+
+        $tagsdata = $this->prepare_tagsdata($interests, $selected);
+        $data = $this->prepare_template_data($tagsdata, $interests);
+
+        $this->content->text .= $OUTPUT->render_from_template('block_course_recommender/tagform', $data);
+        $this->content->text .= html_writer::start_div('courserecommender-results') . html_writer::end_div();
+        return $this->content;
+    }
+
+    /**
+     * Loads and sorts tags, using cache if available.
+     *
+     * @return array
+     */
+    protected function load_tags() {
+        global $DB;
         $cache = \cache::make_from_params(\cache_store::MODE_APPLICATION, 'block_course_recommender', 'tags');
         $tags = $cache->get('alltags');
         if ($tags === false) {
@@ -92,23 +119,31 @@ class block_course_recommender extends block_base {
             $tags = $DB->get_records_sql($sql);
             $cache->set('alltags', $tags);
         }
+        return $tags;
+    }
 
-        // Array with tag names.
+    /**
+     * Extracts tag names from tag objects.
+     *
+     * @param array $tags
+     * @return array
+     */
+    protected function extract_tag_names($tags) {
         $interests = [];
         foreach ($tags as $tag) {
             $interests[] = $tag->rawname;
         }
+        return $interests;
+    }
 
-        if (empty($interests)) {
-            $this->content->text .= html_writer::tag('p', get_string('notagsfound', 'block_course_recommender'));
-            return $this->content;
-        }
-        $selected = [];
-        if (!empty($_POST)) {
-            $selected = optional_param_array('interests', [], PARAM_RAW);
-        }
-
-        // Prepare data for Mustache template.
+    /**
+     * Prepares tag data for the Mustache template.
+     *
+     * @param array $interests
+     * @param array $selected
+     * @return array
+     */
+    protected function prepare_tagsdata($interests, $selected) {
         $tagsdata = [];
         foreach ($interests as $tagname) {
             $tagsdata[] = [
@@ -117,21 +152,29 @@ class block_course_recommender extends block_base {
                 'id' => 'interest-' . clean_param($tagname, PARAM_ALPHANUMEXT),
             ];
         }
+        return $tagsdata;
+    }
+
+    /**
+     * Prepares the data array for the Mustache template.
+     *
+     * @param array $tagsdata
+     * @param array $interests
+     * @return array
+     */
+    protected function prepare_template_data($tagsdata, $interests) {
         $tagcolor = get_config('block_course_recommender', 'tagcolor');
         if (empty($tagcolor)) {
             $tagcolor = '#0f6fc5';
         }
         $maxtags = (int)get_config('block_course_recommender', 'maxtags');
-        $data = [
+        return [
             'interestlabel' => get_string('interest_label', 'block_course_recommender'),
             'tags' => $tagsdata,
             'all_tags_json' => json_encode($interests),
             'tagcolor' => $tagcolor,
             'maxtags' => $maxtags,
         ];
-        $this->content->text .= $OUTPUT->render_from_template('block_course_recommender/tagform', $data);
-        $this->content->text .= html_writer::start_div('courserecommender-results') . html_writer::end_div();
-        return $this->content;
     }
 
     /**
