@@ -26,6 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component    = 'block_course_recommender';
 $plugin->release      = '1.2.1';
-$plugin->version      = 2025091302;
+$plugin->version      = 2025091303;
 $plugin->requires     = 2022041900;
 $plugin->maturity     = MATURITY_STABLE;
