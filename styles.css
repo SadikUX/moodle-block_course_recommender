@@ -14,8 +14,8 @@
 }
 
 .courserecommender-badge.selected {
-    background-color: #0f6fc5;
-    border-color: #0f6fc5;
+    background-color: var(--cr-badge-color, #0f6fc5);
+    border-color: var(--cr-badge-color, #0f6fc5);
     color: #fff;
 }
 
@@ -60,19 +60,10 @@
     font-weight: normal;
     padding: 0.25rem 0.5rem;
     border-radius: 1rem;
-    background-color: rgba(0, 123, 255, 0.1);
-    color: #007bff;
-    border: 1px solid rgba(0, 123, 255, 0.2);
+    background-color: var(--cr-badge-color, rgba(0, 123, 255, 0.1));
+    color: #fff;
+    border: 1px solid var(--cr-badge-color, rgba(0, 123, 255, 0.2));
     transition: all 0.2s ease;
-}
-
-.courserecommender-tags .badge:hover {
-    background-color: rgba(0, 123, 255, 0.2);
-    transition: background-color 0.3s ease;
-}
-
-.courserecommender-tiles::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .courserecommender-tile.card {

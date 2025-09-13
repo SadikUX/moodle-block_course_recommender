@@ -41,3 +41,6 @@ $string['notagsfound'] = 'Dersler için etiket bulunamadı.';
 
 $string['pluginname'] = 'Ders önerisi';
 $string['privacy:metadata'] = 'Ders öneri bloğu herhangi bir kişisel veri saklamaz.';
+
+$string['tagcolor'] = 'Etiket Rengi';
+$string['tagcolor_desc'] = 'Etiketler için rengi seçin.';

@@ -41,3 +41,6 @@ $string['notagsfound'] = 'Aucune étiquette trouvée pour les cours.';
 
 $string['pluginname'] = 'Recommandation de cours';
 $string['privacy:metadata'] = 'Le bloc de recommandation de cours ne stocke aucune donnée personnelle.';
+
+$string['tagcolor'] = 'Couleur de l\'étiquette';
+$string['tagcolor_desc'] = 'Sélectionnez la couleur des étiquettes.';

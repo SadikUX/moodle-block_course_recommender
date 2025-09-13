@@ -41,3 +41,6 @@ $string['notagsfound'] = 'Keine Tags für Kurse verfügbar.';
 
 $string['pluginname'] = 'Kurs-Empfehlung';
 $string['privacy:metadata'] = 'Der Kurs-Empfehlungsblock speichert keine personenbezogenen Daten.';
+
+$string['tagcolor'] = 'Farbe des Tags';
+$string['tagcolor_desc'] = 'Wählen Sie die Farbe für die Tags aus.';

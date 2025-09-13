@@ -107,13 +107,27 @@ class block_course_recommender extends block_base {
                 'id' => 'interest-' . clean_param($tagname, PARAM_ALPHANUMEXT),
             ];
         }
+        $tagcolor = get_config('block_course_recommender', 'tagcolor');
+        if (empty($tagcolor)) {
+            $tagcolor = '#0f6fc5';
+        }
         $data = [
             'interestlabel' => get_string('interest_label', 'block_course_recommender'),
             'tags' => $tagsdata,
             'all_tags_json' => json_encode($interests),
+            'tagcolor' => $tagcolor,
         ];
         $this->content->text .= $OUTPUT->render_from_template('block_course_recommender/tagform', $data);
         $this->content->text .= html_writer::start_div('courserecommender-results') . html_writer::end_div();
         return $this->content;
+    }
+
+    /**
+     * Indicates whether the block has a configuration page.
+     *
+     * @return bool
+     */
+    public function has_config() {
+        return true;
     }
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for block_course_recommender
+ * Settings for the Course Recommender block
  *
  * @package    block_course_recommender
  * @copyright  2025 Sadik Mert
@@ -24,8 +24,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component    = 'block_course_recommender';
-$plugin->release      = '1.2.1';
-$plugin->version      = 2025091302;
-$plugin->requires     = 2022041900;
-$plugin->maturity     = MATURITY_STABLE;
+if ($ADMIN->fulltree) {
+    $settings->add(new admin_setting_configcolourpicker(
+        'block_course_recommender/tagcolor',
+        get_string('tagcolor', 'block_course_recommender'),
+        get_string('tagcolor_desc', 'block_course_recommender'),
+        '#0073e6'
+    ));
+}

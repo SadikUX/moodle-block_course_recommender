@@ -39,7 +39,7 @@
 }}
 <form method="post" action="#" id="courserecommender-form">
     <label class="courserecommender-tags-container-label">{{interestlabel}}</label>
-    <div class="courserecommender-tags-container">
+    <div class="courserecommender-tags-container" style="--cr-badge-color: {{tagcolor}};">
         {{#tags}}
         <span class="courserecommender-badge{{#checked}} selected{{/checked}}" data-tag="{{name}}" id="{{id}}">{{name}}</span>
         {{/tags}}

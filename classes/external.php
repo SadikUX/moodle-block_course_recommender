@@ -138,9 +138,14 @@ class external extends external_api {
         $sqlparams = array_merge($tagidparams, $tagidparams2);
         $courses = $DB->get_records_sql($sql, $sqlparams);
 
+        $tagcolor = get_config('block_course_recommender', 'tagcolor');
+        if (empty($tagcolor)) {
+            $tagcolor = '#0f6fc5';
+        }
         $data = [
             'matchingcourses' => get_string('matchingcourses', 'block_course_recommender'),
             'nocourses' => get_string('nocourses', 'block_course_recommender'),
+            'tagcolor' => $tagcolor,
         ];
         if (!empty($courses)) {
             $data['courses'] = [
