@@ -36,7 +36,7 @@ if ($ADMIN->fulltree) {
         'block_course_recommender/maxtags',
         get_string('maxtags', 'block_course_recommender'),
         get_string('maxtags_desc', 'block_course_recommender'),
-        10,
+        0,
         PARAM_INT
     ));
 
