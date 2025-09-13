@@ -35,6 +35,8 @@ $string['error'] = 'An error occurred.';
 $string['interest_label'] = 'Select your interests';
 
 $string['matchingcourses'] = 'Courses matching your interests';
+$string['maxtags'] = 'Maximum number of tags';
+$string['maxtags_desc'] = 'Set the maximum number of tags to be displayed for the courses. Enter 0 to display all tags (no limit).';
 
 $string['nocourses'] = 'No matching courses found.';
 $string['notagsfound'] = 'No tags available for courses.';
@@ -42,5 +44,12 @@ $string['notagsfound'] = 'No tags available for courses.';
 $string['pluginname'] = 'Course Recommender';
 $string['privacy:metadata'] = 'The Course Recommender block does not store any personal data.';
 
+$string['showalltags'] = 'Show all tags';
+
 $string['tagcolor'] = 'Tag Color';
 $string['tagcolor_desc'] = 'Select the color for the tags.';
+$string['tagsort'] = 'Tag Sorting';
+$string['tagsort_az'] = 'A-Z';
+$string['tagsort_desc'] = 'Select the sorting order for the tags.';
+$string['tagsort_popularity'] = 'Popularity';
+$string['tagsort_za'] = 'Z-A';

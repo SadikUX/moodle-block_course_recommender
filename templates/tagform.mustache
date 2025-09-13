@@ -39,11 +39,16 @@
 }}
 <form method="post" action="#" id="courserecommender-form">
     <label class="courserecommender-tags-container-label">{{interestlabel}}</label>
-    <div class="courserecommender-tags-container" style="--cr-badge-color: {{tagcolor}};">
+    <div class="courserecommender-tags-container" style="--cr-badge-color: {{tagcolor}};" data-maxtags="{{maxtags}}">
         {{#tags}}
         <span class="courserecommender-badge{{#checked}} selected{{/checked}}" data-tag="{{name}}" id="{{id}}">{{name}}</span>
         {{/tags}}
         <input type="hidden" name="interests[]" id="courserecommender-selected-tags" value="">
+        {{#maxtags}}
+        {{^maxtags_is_zero}}
+        <button type="button" class="show-all-tags-btn" style="display:none;">{{#str}}showalltags, block_course_recommender{{/str}}</button>
+        {{/maxtags_is_zero}}
+        {{/maxtags}}
     </div>
 </form>
 <script>

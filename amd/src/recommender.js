@@ -18,6 +18,24 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
             return;
         }
 
+        // Tag-Limitierung und Show-All-Button
+        var tagsContainer = form.find('.courserecommender-tags-container');
+        var badges = tagsContainer.find('.courserecommender-badge');
+        var maxtags = parseInt(tagsContainer.data('maxtags'), 10);
+        if (maxtags > 0 && badges.length > maxtags) {
+            badges.each(function(idx) {
+                if (idx >= maxtags) {
+                    $(this).hide();
+                }
+            });
+            var showAllBtn = tagsContainer.find('.show-all-tags-btn');
+            showAllBtn.show();
+            showAllBtn.on('click', function() {
+                badges.show();
+                $(this).hide();
+            });
+        }
+
         // Badge-Auswahl-Logik
         form.on('click', '.courserecommender-badge', function(e) {
             e.preventDefault();

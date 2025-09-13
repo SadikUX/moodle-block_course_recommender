@@ -35,6 +35,8 @@ $string['error'] = 'Bir hata oluştu.';
 $string['interest_label'] = 'İlgi alan(lar)ınızı seçin';
 
 $string['matchingcourses'] = 'İlgi alan(lar)ınıza uygun dersler';
+$string['maxtags'] = 'Etiketlerin maksimum sayısı';
+$string['maxtags_desc'] = 'Kurslar için görüntülenecek etiketlerin maksimum sayısını ayarlayın. 0 girerseniz, tüm etiketler (sınırlama yok) görüntülenir.';
 
 $string['nocourses'] = 'Uygun ders bulunamadı.';
 $string['notagsfound'] = 'Dersler için etiket bulunamadı.';
@@ -42,5 +44,12 @@ $string['notagsfound'] = 'Dersler için etiket bulunamadı.';
 $string['pluginname'] = 'Ders önerisi';
 $string['privacy:metadata'] = 'Ders öneri bloğu herhangi bir kişisel veri saklamaz.';
 
+$string['showalltags'] = 'Tüm etiketleri göster';
+
 $string['tagcolor'] = 'Etiket Rengi';
 $string['tagcolor_desc'] = 'Etiketler için rengi seçin.';
+$string['tagsort'] = 'Etiket Sıralama';
+$string['tagsort_az'] = 'A-Z';
+$string['tagsort_desc'] = 'Etiketler için sıralama düzenini seçin.';
+$string['tagsort_popularity'] = 'Popülerlik';
+$string['tagsort_za'] = 'Z-A';

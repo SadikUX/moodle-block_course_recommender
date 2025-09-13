@@ -69,17 +69,27 @@ class block_course_recommender extends block_base {
         // Setup the AMD module.
         $this->page->requires->js_call_amd('block_course_recommender/recommender', 'init');
 
-        // Moodle Caching für die Tag-Liste nutzen.
+        // Use Moodle Caching for the tag list.
         $cache = \cache::make_from_params(\cache_store::MODE_APPLICATION, 'block_course_recommender', 'tags');
         $tags = $cache->get('alltags');
         if ($tags === false) {
-            $tags = $DB->get_records_sql("
-                SELECT DISTINCT t.id, t.name, t.rawname
+            $tagsort = get_config('block_course_recommender', 'tagsort');
+            if ($tagsort === 'az') {
+                $orderby = 't.name ASC';
+            } else if ($tagsort === 'za') {
+                $orderby = 't.name DESC';
+            } else {
+                $orderby = 'tagcount DESC, t.name ASC';
+            }
+            $sql = "
+                SELECT t.id, t.name, t.rawname, COUNT(ti.id) AS tagcount
                 FROM {tag} t
                 JOIN {tag_instance} ti ON ti.tagid = t.id
                 WHERE ti.itemtype = 'course' AND ti.component = 'core'
-                ORDER BY t.name ASC
-            ");
+                GROUP BY t.id, t.name, t.rawname
+                ORDER BY $orderby
+            ";
+            $tags = $DB->get_records_sql($sql);
             $cache->set('alltags', $tags);
         }
 
@@ -111,11 +121,13 @@ class block_course_recommender extends block_base {
         if (empty($tagcolor)) {
             $tagcolor = '#0f6fc5';
         }
+        $maxtags = (int)get_config('block_course_recommender', 'maxtags');
         $data = [
             'interestlabel' => get_string('interest_label', 'block_course_recommender'),
             'tags' => $tagsdata,
             'all_tags_json' => json_encode($interests),
             'tagcolor' => $tagcolor,
+            'maxtags' => $maxtags,
         ];
         $this->content->text .= $OUTPUT->render_from_template('block_course_recommender/tagform', $data);
         $this->content->text .= html_writer::start_div('courserecommender-results') . html_writer::end_div();

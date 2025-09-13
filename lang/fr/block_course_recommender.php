@@ -35,6 +35,8 @@ $string['error'] = 'Une erreur est survenue.';
 $string['interest_label'] = 'Sélectionnez vos centres d’intérêt';
 
 $string['matchingcourses'] = 'Cours correspondant à vos centres d’intérêt';
+$string['maxtags'] = 'Nombre maximum d\'étiquettes';
+$string['maxtags_desc'] = 'Définissez le nombre maximum d\'étiquettes à afficher pour les cours. Entrez 0 pour afficher toutes les étiquettes (aucune limite).';
 
 $string['nocourses'] = 'Aucun cours correspondant trouvé.';
 $string['notagsfound'] = 'Aucune étiquette trouvée pour les cours.';
@@ -42,5 +44,12 @@ $string['notagsfound'] = 'Aucune étiquette trouvée pour les cours.';
 $string['pluginname'] = 'Recommandation de cours';
 $string['privacy:metadata'] = 'Le bloc de recommandation de cours ne stocke aucune donnée personnelle.';
 
+$string['showalltags'] = 'Afficher tous les tags';
+
 $string['tagcolor'] = 'Couleur de l\'étiquette';
 $string['tagcolor_desc'] = 'Sélectionnez la couleur des étiquettes.';
+$string['tagsort'] = 'Tri des étiquettes';
+$string['tagsort_az'] = 'A-Z';
+$string['tagsort_desc'] = 'Sélectionnez l\'ordre de tri des étiquettes.';
+$string['tagsort_popularity'] = 'Popularité';
+$string['tagsort_za'] = 'Z-A';

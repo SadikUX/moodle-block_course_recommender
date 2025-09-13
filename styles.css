@@ -1,3 +1,25 @@
+:root {
+    --cr-badge-color: #0f6fc5;
+}
+
+.show-all-tags-btn {
+    display: inline-block;
+    border: none;
+    border-radius: 2rem;
+    padding: 0.35em 1.2em;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: transparent;
+    margin-left: auto;
+}
+
+.show-all-tags-btn:hover, .show-all-tags-btn:focus {
+    color: var(--cr-badge-color);
+    text-decoration: none;
+    outline: none;
+}
+
 .courserecommender-badge {
     display: inline-block;
     padding: 0.5rem 1.1rem;
@@ -14,8 +36,8 @@
 }
 
 .courserecommender-badge.selected {
-    background-color: var(--cr-badge-color, #0f6fc5);
-    border-color: var(--cr-badge-color, #0f6fc5);
+    background-color: var(--cr-badge-color);
+    border-color: var(--cr-badge-color);
     color: #fff;
 }
 

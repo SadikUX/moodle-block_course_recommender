@@ -35,6 +35,8 @@ $string['error'] = 'Es ist ein Fehler aufgetreten.';
 $string['interest_label'] = 'Wähle deine Interessen';
 
 $string['matchingcourses'] = 'Kurse, die zu deinen Interessen passen';
+$string['maxtags'] = 'Maximale Anzahl von Tags';
+$string['maxtags_desc'] = 'Legen Sie die maximale Anzahl von Tags fest, die für die Kurse angezeigt werden sollen. Geben Sie 0 ein, um alle Tags anzuzeigen (keine Begrenzung).';
 
 $string['nocourses'] = 'Keine passenden Kurse gefunden.';
 $string['notagsfound'] = 'Keine Tags für Kurse verfügbar.';
@@ -42,5 +44,12 @@ $string['notagsfound'] = 'Keine Tags für Kurse verfügbar.';
 $string['pluginname'] = 'Kurs-Empfehlung';
 $string['privacy:metadata'] = 'Der Kurs-Empfehlungsblock speichert keine personenbezogenen Daten.';
 
+$string['showalltags'] = 'Alle Tags anzeigen';
+
 $string['tagcolor'] = 'Farbe des Tags';
 $string['tagcolor_desc'] = 'Wählen Sie die Farbe für die Tags aus.';
+$string['tagsort'] = 'Sortierung der Tags';
+$string['tagsort_az'] = 'A-Z';
+$string['tagsort_desc'] = 'Wählen Sie die Sortierreihenfolge für die Tags aus.';
+$string['tagsort_popularity'] = 'Beliebtheit';
+$string['tagsort_za'] = 'Z-A';

@@ -31,4 +31,24 @@ if ($ADMIN->fulltree) {
         get_string('tagcolor_desc', 'block_course_recommender'),
         '#0073e6'
     ));
+
+    $settings->add(new admin_setting_configtext(
+        'block_course_recommender/maxtags',
+        get_string('maxtags', 'block_course_recommender'),
+        get_string('maxtags_desc', 'block_course_recommender'),
+        10,
+        PARAM_INT
+    ));
+
+    $settings->add(new admin_setting_configselect(
+        'block_course_recommender/tagsort',
+        get_string('tagsort', 'block_course_recommender'),
+        get_string('tagsort_desc', 'block_course_recommender'),
+        'popularity',
+        [
+            'popularity' => get_string('tagsort_popularity', 'block_course_recommender'),
+            'az' => get_string('tagsort_az', 'block_course_recommender'),
+            'za' => get_string('tagsort_za', 'block_course_recommender'),
+        ]
+    ));
 }
