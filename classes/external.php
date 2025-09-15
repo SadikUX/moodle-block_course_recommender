@@ -147,6 +147,7 @@ class external extends external_api {
         $in2 = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag2');
         $tagidssql2 = $in2[0];
         $tagidparams2 = $in2[1];
+        $groupconcat = $DB->sql_group_concat('t.rawname');
         $sql = "
             WITH matching_courses AS (
                 SELECT DISTINCT c.id
@@ -157,7 +158,7 @@ class external extends external_api {
                 AND ti.component = 'core'
                 AND c.visible = 1
             )
-            SELECT c.*, GROUP_CONCAT(t.rawname) as tagnames,
+            SELECT c.*, $groupconcat as tagnames,
                    COUNT(CASE WHEN t.id $tagidssql2 THEN 1 END) as matching_tags
             FROM {course} c
             JOIN matching_courses mc ON mc.id = c.id
