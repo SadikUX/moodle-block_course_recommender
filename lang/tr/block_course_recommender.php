@@ -36,10 +36,12 @@ $string['interest_label'] = 'İlgi alan(lar)ınızı seçin';
 
 $string['matchingcourses'] = 'İlgi alan(lar)ınıza uygun dersler';
 $string['maxtags'] = 'Etiketlerin maksimum sayısı';
-$string['maxtags_desc'] = 'Kurslar için görüntülenecek etiketlerin maksimum sayısını ayarlayın. 0 girerseniz, tüm etiketler (sınırlama yok) görüntülenir.';
+$string['maxtags_desc'] = 'Görüntülenecek maksimum etiket sayısını ayarlayın. '
+    . '0 girerseniz tüm etiketler görüntülenir.';
 
 $string['nocourses'] = 'Uygun ders bulunamadı.';
 $string['notagsfound'] = 'Dersler için etiket bulunamadı.';
+$string['participants'] = '{$a} katılımcı';
 
 $string['pluginname'] = 'Ders önerisi';
 $string['popularcourses'] = 'Popüler dersler';

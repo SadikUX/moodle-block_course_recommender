@@ -154,7 +154,7 @@ class external extends external_api {
         $in2 = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag2');
         $tagidssql2 = $in2[0];
         $tagidparams2 = $in2[1];
-        $groupconcat = $DB->sql_group_concat('t.rawname');
+        $groupconcat = $DB->sql_group_concat('DISTINCT t.rawname');
         $sql = "
             WITH matching_courses AS (
                 SELECT DISTINCT c.id
@@ -165,10 +165,18 @@ class external extends external_api {
                 AND ti.component = 'core'
                 AND c.visible = 1
             )
-            SELECT c.*, $groupconcat as tagnames,
-                   COUNT(CASE WHEN t.id $tagidssql2 THEN 1 END) as matching_tags
+            SELECT c.*, cc.name AS categoryname, $groupconcat as tagnames,
+                   COUNT(DISTINCT ue.userid) AS enrolments,
+                   COUNT(DISTINCT CASE
+                       WHEN t.id $tagidssql2 THEN t.id
+                   END) as matching_tags
             FROM {course} c
             JOIN matching_courses mc ON mc.id = c.id
+            JOIN {course_categories} cc ON cc.id = c.category
+            LEFT JOIN {enrol} e ON e.courseid = c.id
+                AND e.status = :enrolenabled
+            LEFT JOIN {user_enrolments} ue ON ue.enrolid = e.id
+                AND ue.status = :userenrolactive
             LEFT JOIN {tag_instance} ti ON ti.itemid = c.id
                 AND ti.itemtype = 'course'
                 AND ti.component = 'core'
@@ -177,7 +185,10 @@ class external extends external_api {
             ORDER BY matching_tags DESC, c.timecreated DESC
             LIMIT 20
         ";
-        $sqlparams = array_merge($tagidparams, $tagidparams2);
+        $sqlparams = array_merge($tagidparams, [
+            'enrolenabled' => ENROL_INSTANCE_ENABLED,
+            'userenrolactive' => ENROL_USER_ACTIVE,
+        ], $tagidparams2);
         return $DB->get_records_sql($sql, $sqlparams);
     }
 
@@ -189,13 +200,20 @@ class external extends external_api {
     protected static function find_popular_courses() {
         global $DB;
 
+        $groupconcat = $DB->sql_group_concat('DISTINCT t.rawname');
         $sql = "
-            SELECT c.*, '' AS tagnames, COUNT(DISTINCT ue.userid) AS enrolments
+            SELECT c.*, cc.name AS categoryname, $groupconcat AS tagnames,
+                   COUNT(DISTINCT ue.userid) AS enrolments
               FROM {course} c
+              JOIN {course_categories} cc ON cc.id = c.category
          LEFT JOIN {enrol} e ON e.courseid = c.id
                    AND e.status = :enrolenabled
          LEFT JOIN {user_enrolments} ue ON ue.enrolid = e.id
                    AND ue.status = :userenrolactive
+         LEFT JOIN {tag_instance} ti ON ti.itemid = c.id
+                   AND ti.itemtype = 'course'
+                   AND ti.component = 'core'
+         LEFT JOIN {tag} t ON t.id = ti.tagid
              WHERE c.visible = 1
                    AND c.id <> :siteid
           GROUP BY c.id
@@ -220,6 +238,9 @@ class external extends external_api {
         foreach ($courses as $course) {
             $url = new \moodle_url('/course/view.php', ['id' => $course->id]);
             $title = format_string($course->fullname);
+            $summary = self::format_course_summary($course);
+            $categoryname = !empty($course->categoryname) ? format_string($course->categoryname) : '';
+            $enrolments = isset($course->enrolments) ? (int)$course->enrolments : 0;
             $courseobj = new \core_course_list_element($course);
             $image = \core_course\external\course_summary_exporter::get_course_image($courseobj);
             if (empty($image)) {
@@ -229,20 +250,54 @@ class external extends external_api {
             $tags = [];
             if (!empty($course->tagnames)) {
                 $rawtags = array_map('trim', explode(',', $course->tagnames));
+                $seentags = [];
                 foreach ($rawtags as $t) {
-                    if (in_array(mb_strtolower($t), $selectedinterests, true)) {
+                    $normalizedtag = mb_strtolower($t);
+                    if (isset($seentags[$normalizedtag])) {
+                        continue;
+                    }
+                    if (
+                        empty($selectedinterests)
+                        || in_array($normalizedtag, $selectedinterests, true)
+                    ) {
                         $tags[] = $t;
+                        $seentags[$normalizedtag] = true;
                     }
                 }
             }
             $list[] = [
                 'url' => $url->out(false),
                 'title' => $title,
+                'summary' => $summary,
+                'categoryname' => $categoryname,
+                'enrolments' => $enrolments,
+                'enrolmentlabel' => get_string('participants', 'block_course_recommender', $enrolments),
                 'image' => $image,
                 'tags' => $tags,
             ];
         }
         return $list;
+    }
+
+    /**
+     * Format and shorten a course summary for compact cards.
+     *
+     * @param \stdClass $course
+     * @return string
+     */
+    protected static function format_course_summary($course) {
+        if (empty($course->summary)) {
+            return '';
+        }
+
+        $summary = format_text($course->summary, $course->summaryformat, [
+            'noclean' => false,
+            'overflowdiv' => false,
+            'para' => false,
+        ]);
+        $summary = trim(strip_tags($summary));
+
+        return shorten_text($summary, 120);
     }
 
     /**

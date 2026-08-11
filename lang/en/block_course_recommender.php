@@ -40,6 +40,7 @@ $string['maxtags_desc'] = 'Set the maximum number of tags to be displayed for th
 
 $string['nocourses'] = 'No matching courses found.';
 $string['notagsfound'] = 'No tags available for courses.';
+$string['participants'] = '{$a} participants';
 
 $string['pluginname'] = 'Course Recommender';
 $string['popularcourses'] = 'Popular courses';

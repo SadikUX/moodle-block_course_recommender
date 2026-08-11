@@ -2,25 +2,91 @@
     --cr-badge-color: #0f6fc5;
 }
 
+.block_course_recommender .card-body {
+    padding: 0;
+}
+
+.courserecommender-tags-container-label {
+    display: block;
+    margin: 0.25rem 1rem 0.5rem;
+    color: #1f2937;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
 .courserecommender-search {
-    margin: 0.75rem 1rem 0;
+    margin: 0.5rem 1rem 0;
+}
+
+.courserecommender-search-control {
+    position: relative;
+}
+
+.courserecommender-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.9rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    border: 2px solid #6b7280;
+    border-radius: 50%;
+    transform: translateY(-55%);
+    pointer-events: none;
+}
+
+.courserecommender-search-icon::after {
+    position: absolute;
+    right: -0.35rem;
+    bottom: -0.25rem;
+    width: 0.45rem;
+    height: 2px;
+    background: #6b7280;
+    border-radius: 2px;
+    content: "";
+    transform: rotate(45deg);
+}
+
+.courserecommender-tag-search.form-control {
+    min-height: 2.75rem;
+    padding-left: 2.65rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.courserecommender-tag-search.form-control:focus {
+    border-color: var(--cr-badge-color);
+    box-shadow: 0 0 0 0.2rem rgba(15, 111, 197, 0.18);
 }
 
 .courserecommender-search-help {
+    margin-top: 0.4rem;
     margin-bottom: 0;
+    color: #6b7280 !important;
+    font-size: 0.78rem;
 }
 
 .courserecommender-badge {
     display: inline-block;
-    padding: 0.5rem 1.1rem;
-    border-radius: 2rem;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    color: #495057;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid #d8dee7;
+    border-radius: 999px;
+    background: #fff;
+    color: #374151;
     cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.95rem;
-    margin: 0.15em 0.2em;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
     user-select: none;
     white-space: nowrap;
 }
@@ -29,21 +95,41 @@
     background-color: var(--cr-badge-color);
     border-color: var(--cr-badge-color);
     color: #fff;
+    box-shadow: 0 0.45rem 1rem rgba(15, 111, 197, 0.22);
 }
 
 .courserecommender-badge:not(.selected):hover {
-    background-color: #e9ecef;
-    border-color: #ced4da;
+    background-color: #f9fafb;
+    border-color: #aeb8c7;
+    box-shadow: 0 0.35rem 0.8rem rgba(15, 23, 42, 0.08);
     transform: translateY(-1px);
+}
+
+.courserecommender-results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem 1rem 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid #edf0f4;
+}
+
+.courserecommender-results-header h4 {
+    margin: 0;
+    color: #111827;
+    font-size: 1rem;
+    font-weight: 800;
+    line-height: 1.25;
 }
 
 .courserecommender-tiles {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    gap: 1.5rem;
+    gap: 0.9rem;
     padding: 1rem;
-    animation: fadeInTiles 0.6s;
+    scroll-snap-type: x proximity;
+    animation: fadeInTiles 0.36s ease-out;
 }
 
 .courserecommender-tiles::-webkit-scrollbar {
@@ -55,37 +141,41 @@
 }
 
 .courserecommender-tiles::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(17, 24, 39, 0.18);
     border-radius: 4px;
 }
 
 .courserecommender-tags {
-    justify-content: center;
-    margin-top: 0.5rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem;
+    gap: 0.35rem;
+    margin-top: 0.7rem;
 }
 
 .courserecommender-tags .badge {
-    font-size: 0.75rem;
-    font-weight: normal;
     padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    background-color: var(--cr-badge-color, rgba(0, 123, 255, 0.1));
-    color: #fff;
-    border: 1px solid var(--cr-badge-color, rgba(0, 123, 255, 0.2));
-    transition: all 0.2s ease;
+    border: 1px solid rgba(15, 111, 197, 0.2);
+    border-radius: 999px;
+    background: rgba(15, 111, 197, 0.08);
+    color: #1f2937;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
 }
 
 .courserecommender-tile.card {
-    flex: 0 0 31%;
+    flex: 0 0 min(17rem, 78%);
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-    overflow: visible;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.4rem 1.2rem rgba(15, 23, 42, 0.08);
+    scroll-snap-align: start;
+    text-align: left;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+    overflow: hidden;
 }
 
 /* If the block is in the right drawer */
@@ -102,25 +192,79 @@
 }
 
 .courserecommender-tile.card:hover {
-    transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13);
+    border-color: rgba(15, 111, 197, 0.35);
+    box-shadow: 0 0.9rem 1.8rem rgba(15, 23, 42, 0.14);
+    transform: translateY(-3px);
+}
+
+.courserecommender-imgwrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #eef2f7;
 }
 
 .courserecommender-img {
     width: 100%;
-    height: 10vh;
+    height: 100%;
     object-fit: cover;
-    background: #f5f5f5;
+    transition: transform 0.28s ease, filter 0.28s ease;
+}
+
+.courserecommender-tile.card:hover .courserecommender-img {
+    filter: saturate(1.05);
+    transform: scale(1.04);
+}
+
+.courserecommender-tile .card-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 10rem;
+    padding: 0.9rem;
 }
 
 .courserecommender-title {
-    margin-top: 0.5rem;
-    font-size: 1.1rem;
-    font-weight: 600;
+    display: -webkit-box;
+    margin: 0 0 0.55rem;
+    overflow: hidden;
+    color: #111827;
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.25;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.courserecommender-summary {
+    display: -webkit-box;
+    margin: 0 0 0.65rem;
+    overflow: hidden;
+    color: #4b5563;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.courserecommender-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.6rem;
+    margin-top: auto;
+    color: #6b7280;
+    font-size: 0.74rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.courserecommender-meta span + span::before {
+    margin-right: 0.6rem;
+    color: #c4cad4;
+    content: "•";
 }
 
 .courserecommender-link {
-    color: #000;
+    color: inherit;
     text-decoration: none;
     display: flex;
     flex-direction: column;
@@ -128,80 +272,37 @@
 }
 
 .courserecommender-link:hover {
-    color: #000;
+    color: inherit;
     text-decoration: none;
 }
 
 @keyframes fadeInTiles {
     0% {
         opacity: 0;
-        transform: translateY(30px) scale(0.98);
-        filter: blur(4px);
+        transform: translateY(0.5rem);
     }
     100% {
         opacity: 1;
         transform: translateY(0) scale(1);
-        filter: blur(0);
     }
 }
 
 @media (max-width: 900px) {
     .courserecommender-tile.card {
-        flex: 0 0 75%;
+        flex-basis: min(16rem, 82%);
     }
 }
 
 @media (max-width: 600px) {
     .courserecommender-tile.card {
-        flex: 0 0 90%;
+        flex-basis: 88%;
     }
 }
 
 .courserecommender-tags-container {
-    padding: 1rem;
+    padding: 0.85rem 1rem 0.25rem;
     display: flex;
     flex-flow: nowrap;
     overflow-x: auto;
-    gap: 0.5rem;
-}
-
-.courserecommender-interest-toggle {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.courserecommender-interest-tag {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    color: #495057;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    font-size: 0.9rem;
-    user-select: none;
-}
-
-.courserecommender-interest-tag:hover {
-    background-color: #e9ecef;
-    border-color: #ced4da;
-    transform: translateY(-1px);
-}
-
-.courserecommender-interest-toggle:checked + .courserecommender-interest-tag {
-    background-color: #0f6fc5;
-    border-color: #0f6fc5;
-    color: white;
-}
-
-.courserecommender-interest-toggle:focus + .courserecommender-interest-tag {
-    box-shadow: 0 0 0 0.2rem rgba(15, 111, 197, 0.25);
-}
-
-.courserecommender-interest-toggle:focus-visible + .courserecommender-interest-tag {
-    outline: 2px solid #0f6fc5;
-    outline-offset: 2px;
+    gap: 0.45rem;
 }

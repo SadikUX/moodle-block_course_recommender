@@ -55,16 +55,34 @@
         }
     }
 }}
-<h4 class="courserecommender-tags-container">{{matchingcourses}}</h4>
+<div class="courserecommender-results-header">
+    <h4>{{matchingcourses}}</h4>
+</div>
 {{#courses}}
 <div class="courserecommender-tiles">
     {{#list}}
     <div class="courserecommender-tile card">
         <a href="{{url}}" class="courserecommender-link">
-            <img src="{{image}}" class="card-img-top courserecommender-img" alt="{{title}}">
+            <div class="courserecommender-imgwrap">
+                <img src="{{image}}" class="card-img-top courserecommender-img" alt="{{title}}">
+            </div>
             <div class="card-body">
                 <h5 class="card-title courserecommender-title">{{title}}</h5>
-                <div class="courserecommender-tags" style="--cr-badge-color: {{#tagcolor}}{{tagcolor}}{{/tagcolor}}{{^tagcolor}}#0f6fc5{{/tagcolor}};">
+                {{#summary}}
+                <p class="courserecommender-summary">{{summary}}</p>
+                {{/summary}}
+                <div class="courserecommender-meta">
+                    {{#enrolmentlabel}}
+                    <span>{{enrolmentlabel}}</span>
+                    {{/enrolmentlabel}}
+                    {{#categoryname}}
+                    <span>{{categoryname}}</span>
+                    {{/categoryname}}
+                </div>
+                <div
+                    class="courserecommender-tags"
+                    style="--cr-badge-color: {{#tagcolor}}{{tagcolor}}{{/tagcolor}}{{^tagcolor}}#0f6fc5{{/tagcolor}};"
+                >
                     {{#tags}}
                     <span class="badge badge-info mr-1">{{.}}</span>
                     {{/tags}}

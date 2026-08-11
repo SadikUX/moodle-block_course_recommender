@@ -41,18 +41,31 @@
     <label class="courserecommender-tags-container-label">{{interestlabel}}</label>
     <div class="courserecommender-search">
         <label class="sr-only" for="courserecommender-tag-search">{{#str}}searchtags, block_course_recommender{{/str}}</label>
-        <input
-            type="search"
-            id="courserecommender-tag-search"
-            class="form-control courserecommender-tag-search"
-            placeholder="{{#str}}searchtagsplaceholder, block_course_recommender{{/str}}"
-            autocomplete="off"
-        >
-        <small class="form-text text-muted courserecommender-search-help">{{#str}}searchtagshelp, block_course_recommender{{/str}}</small>
+        <div class="courserecommender-search-control">
+            <span class="courserecommender-search-icon" aria-hidden="true"></span>
+            <input
+                type="search"
+                id="courserecommender-tag-search"
+                class="form-control courserecommender-tag-search"
+                placeholder="{{#str}}searchtagsplaceholder, block_course_recommender{{/str}}"
+                autocomplete="off"
+            >
+        </div>
+        <small class="form-text text-muted courserecommender-search-help">
+            {{#str}}searchtagshelp, block_course_recommender{{/str}}
+        </small>
     </div>
-    <div class="courserecommender-tags-container" style="--cr-badge-color: {{#tagcolor}}{{tagcolor}}{{/tagcolor}}{{^tagcolor}}#0f6fc5{{/tagcolor}};" data-maxtags="{{maxtags}}">
+    <div
+        class="courserecommender-tags-container"
+        style="--cr-badge-color: {{#tagcolor}}{{tagcolor}}{{/tagcolor}}{{^tagcolor}}#0f6fc5{{/tagcolor}};"
+        data-maxtags="{{maxtags}}"
+    >
         {{#tags}}
-        <span class="courserecommender-badge{{#checked}} selected{{/checked}}" data-tag="{{name}}" id="{{id}}">{{name}}</span>
+        <span
+            class="courserecommender-badge{{#checked}} selected{{/checked}}"
+            data-tag="{{name}}"
+            id="{{id}}"
+        >{{name}}</span>
         {{/tags}}
         <input type="hidden" name="interests[]" id="courserecommender-selected-tags" value="">
     </div>

@@ -36,10 +36,12 @@ $string['interest_label'] = 'Sélectionnez vos centres d’intérêt';
 
 $string['matchingcourses'] = 'Cours correspondant à vos centres d’intérêt';
 $string['maxtags'] = 'Nombre maximum d\'étiquettes';
-$string['maxtags_desc'] = 'Définissez le nombre maximum d\'étiquettes à afficher pour les cours. Entrez 0 pour afficher toutes les étiquettes (aucune limite).';
+$string['maxtags_desc'] = 'Définissez le nombre maximum d\'étiquettes à afficher. '
+    . 'Entrez 0 pour afficher toutes les étiquettes.';
 
 $string['nocourses'] = 'Aucun cours correspondant trouvé.';
 $string['notagsfound'] = 'Aucune étiquette trouvée pour les cours.';
+$string['participants'] = '{$a} participants';
 
 $string['pluginname'] = 'Recommandation de cours';
 $string['popularcourses'] = 'Cours populaires';

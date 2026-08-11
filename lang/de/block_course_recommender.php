@@ -36,10 +36,12 @@ $string['interest_label'] = 'Wähle deine Interessen';
 
 $string['matchingcourses'] = 'Kurse, die zu deinen Interessen passen';
 $string['maxtags'] = 'Maximale Anzahl von Tags';
-$string['maxtags_desc'] = 'Legen Sie die maximale Anzahl von Tags fest, die für die Kurse angezeigt werden sollen. Geben Sie 0 ein, um alle Tags anzuzeigen (keine Begrenzung).';
+$string['maxtags_desc'] = 'Legen Sie die maximale Anzahl von Tags fest, die angezeigt werden sollen. '
+    . 'Geben Sie 0 ein, um alle Tags anzuzeigen.';
 
 $string['nocourses'] = 'Keine passenden Kurse gefunden.';
 $string['notagsfound'] = 'Keine Tags für Kurse verfügbar.';
+$string['participants'] = '{$a} Teilnehmende';
 
 $string['pluginname'] = 'Kurs-Empfehlung';
 $string['popularcourses'] = 'Beliebte Kurse';
