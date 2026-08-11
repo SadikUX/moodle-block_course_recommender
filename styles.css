@@ -2,23 +2,12 @@
     --cr-badge-color: #0f6fc5;
 }
 
-.show-all-tags-btn {
-    display: inline-block;
-    border: none;
-    border-radius: 2rem;
-    padding: 0.35em 1.2em;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    background-color: transparent;
-    margin-left: auto;
+.courserecommender-search {
+    margin: 0.75rem 1rem 0;
 }
 
-.show-all-tags-btn:hover,
-.show-all-tags-btn:focus {
-    color: var(--cr-badge-color);
-    text-decoration: none;
-    outline: none;
+.courserecommender-search-help {
+    margin-bottom: 0;
 }
 
 .courserecommender-badge {

@@ -42,10 +42,12 @@ $string['nocourses'] = 'Keine passenden Kurse gefunden.';
 $string['notagsfound'] = 'Keine Tags für Kurse verfügbar.';
 
 $string['pluginname'] = 'Kurs-Empfehlung';
+$string['popularcourses'] = 'Beliebte Kurse';
 $string['privacy:metadata'] = 'Der Kurs-Empfehlungsblock speichert keine personenbezogenen Daten.';
 
-$string['showalltags'] = 'Alle Tags anzeigen';
-
+$string['searchtags'] = 'Tags suchen';
+$string['searchtagshelp'] = 'Die beliebtesten Tags werden zuerst angezeigt. Suche nach weiteren vorhandenen Tags.';
+$string['searchtagsplaceholder'] = 'Vorhandene Tags suchen';
 $string['tagcolor'] = 'Farbe des Tags';
 $string['tagcolor_desc'] = 'Wählen Sie die Farbe für die Tags aus.';
 $string['tagsort'] = 'Sortierung der Tags';

@@ -42,10 +42,12 @@ $string['nocourses'] = 'No matching courses found.';
 $string['notagsfound'] = 'No tags available for courses.';
 
 $string['pluginname'] = 'Course Recommender';
+$string['popularcourses'] = 'Popular courses';
 $string['privacy:metadata'] = 'The Course Recommender block does not store any personal data.';
 
-$string['showalltags'] = 'Show all tags';
-
+$string['searchtags'] = 'Search tags';
+$string['searchtagshelp'] = 'The most popular tags are shown first. Search to find more existing tags.';
+$string['searchtagsplaceholder'] = 'Search existing tags';
 $string['tagcolor'] = 'Tag Color';
 $string['tagcolor_desc'] = 'Select the color for the tags.';
 $string['tagsort'] = 'Tag Sorting';

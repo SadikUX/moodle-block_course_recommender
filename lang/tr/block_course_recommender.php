@@ -42,9 +42,8 @@ $string['nocourses'] = 'Uygun ders bulunamadı.';
 $string['notagsfound'] = 'Dersler için etiket bulunamadı.';
 
 $string['pluginname'] = 'Ders önerisi';
+$string['popularcourses'] = 'Popüler dersler';
 $string['privacy:metadata'] = 'Ders öneri bloğu herhangi bir kişisel veri saklamaz.';
-
-$string['showalltags'] = 'Tüm etiketleri göster';
 
 $string['tagcolor'] = 'Etiket Rengi';
 $string['tagcolor_desc'] = 'Etiketler için rengi seçin.';

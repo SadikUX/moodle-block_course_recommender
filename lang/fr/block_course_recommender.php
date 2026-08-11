@@ -42,9 +42,8 @@ $string['nocourses'] = 'Aucun cours correspondant trouvé.';
 $string['notagsfound'] = 'Aucune étiquette trouvée pour les cours.';
 
 $string['pluginname'] = 'Recommandation de cours';
+$string['popularcourses'] = 'Cours populaires';
 $string['privacy:metadata'] = 'Le bloc de recommandation de cours ne stocke aucune donnée personnelle.';
-
-$string['showalltags'] = 'Afficher tous les tags';
 
 $string['tagcolor'] = 'Couleur de l\'étiquette';
 $string['tagcolor_desc'] = 'Sélectionnez la couleur des étiquettes.';

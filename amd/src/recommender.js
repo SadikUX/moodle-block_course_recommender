@@ -18,23 +18,24 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
             return;
         }
 
-        // Tag-Limitierung und Show-All-Button
+        // Tag-Limitierung.
         var tagsContainer = form.find('.courserecommender-tags-container');
         var badges = tagsContainer.find('.courserecommender-badge');
         var maxtags = parseInt(tagsContainer.data('maxtags'), 10);
+        var searchInput = form.find('.courserecommender-tag-search');
+        var searchLimit = maxtags > 0 ? maxtags : 20;
+
         if (maxtags > 0 && badges.length > maxtags) {
             badges.each(function(idx) {
                 if (idx >= maxtags) {
                     $(this).hide();
                 }
             });
-            var showAllBtn = tagsContainer.find('.show-all-tags-btn');
-            showAllBtn.show();
-            showAllBtn.on('click', function() {
-                badges.show();
-                $(this).hide();
-            });
         }
+
+        searchInput.on('input', function() {
+            filterTags($(this).val(), badges, maxtags, searchLimit);
+        });
 
         // Badge-Auswahl-Logik
         form.on('click', '.courserecommender-badge', function(e) {
@@ -51,6 +52,40 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
         form.on('submit', function(e) {
             e.preventDefault();
             updateResults(form, resultsContainer);
+        });
+
+        updateResults(form, resultsContainer);
+    }
+
+    /**
+     * Filter displayed tags by the search query.
+     *
+     * @param {String} query The search query
+     * @param {jQuery} badges The tag badges
+     * @param {Number} maxtags Initial number of popular tags to show
+     * @param {Number} searchLimit Maximum matching tags shown while searching
+     */
+    function filterTags(query, badges, maxtags, searchLimit) {
+        var normalizedQuery = $.trim(query).toLowerCase();
+        var visibleMatches = 0;
+
+        if (!normalizedQuery) {
+            badges.each(function(idx) {
+                $(this).toggle(maxtags <= 0 || idx < maxtags || $(this).hasClass('selected'));
+            });
+            return;
+        }
+
+        badges.each(function() {
+            var badge = $(this);
+            var tag = String(badge.data('tag') || '').toLowerCase();
+            var matches = tag.indexOf(normalizedQuery) !== -1;
+            var shouldShow = badge.hasClass('selected') || (matches && visibleMatches < searchLimit);
+
+            badge.toggle(shouldShow);
+            if (matches && visibleMatches < searchLimit) {
+                visibleMatches++;
+            }
         });
     }
 

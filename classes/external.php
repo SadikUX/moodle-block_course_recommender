@@ -91,20 +91,27 @@ class external extends external_api {
         }
 
         if (empty($params['interests'])) {
-            return ['html' => ''];
+            $courses = self::find_popular_courses();
+            $selectedinterests = [];
+            $heading = get_string('popularcourses', 'block_course_recommender');
+        } else {
+            $tagids = self::get_tag_ids_by_rawnames($params['interests']);
+            if (empty($tagids)) {
+                return [
+                    'html' => '<div class="alert alert-info">'
+                        . get_string('nocourses', 'block_course_recommender') . '</div>',
+                ];
+            }
+
+            $courses = self::find_matching_courses($tagids);
+            $selectedinterests = array_map('mb_strtolower', array_map('trim', $params['interests']));
+            $heading = get_string('matchingcourses', 'block_course_recommender');
         }
 
-        $tagids = self::get_tag_ids_by_rawnames($params['interests']);
-        if (empty($tagids)) {
-            return ['html' => '<div class="alert alert-info">' . get_string('nocourses', 'block_course_recommender') . '</div>'];
-        }
-
-        $courses = self::find_matching_courses($tagids);
-        $selectedinterests = array_map('mb_strtolower', array_map('trim', $params['interests']));
         $courselist = self::prepare_course_list_data($courses, $selectedinterests);
 
         $data = [
-            'matchingcourses' => get_string('matchingcourses', 'block_course_recommender'),
+            'matchingcourses' => $heading,
             'nocourses' => get_string('nocourses', 'block_course_recommender'),
             'tagcolor' => self::get_tagcolor(),
         ];
@@ -172,6 +179,34 @@ class external extends external_api {
         ";
         $sqlparams = array_merge($tagidparams, $tagidparams2);
         return $DB->get_records_sql($sql, $sqlparams);
+    }
+
+    /**
+     * Find popular courses by active enrolments.
+     *
+     * @return array
+     */
+    protected static function find_popular_courses() {
+        global $DB;
+
+        $sql = "
+            SELECT c.*, '' AS tagnames, COUNT(DISTINCT ue.userid) AS enrolments
+              FROM {course} c
+         LEFT JOIN {enrol} e ON e.courseid = c.id
+                   AND e.status = :enrolenabled
+         LEFT JOIN {user_enrolments} ue ON ue.enrolid = e.id
+                   AND ue.status = :userenrolactive
+             WHERE c.visible = 1
+                   AND c.id <> :siteid
+          GROUP BY c.id
+          ORDER BY enrolments DESC, c.timecreated DESC
+        ";
+
+        return $DB->get_records_sql($sql, [
+            'enrolenabled' => ENROL_INSTANCE_ENABLED,
+            'userenrolactive' => ENROL_USER_ACTIVE,
+            'siteid' => SITEID,
+        ], 0, 20);
     }
 
     /**
