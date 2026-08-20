@@ -154,7 +154,7 @@ class external extends external_api {
         $in2 = $DB->get_in_or_equal($tagids, SQL_PARAMS_NAMED, 'tag2');
         $tagidssql2 = $in2[0];
         $tagidparams2 = $in2[1];
-        $groupconcat = $DB->sql_group_concat('DISTINCT t.rawname');
+        $groupconcat = $DB->sql_group_concat('coursetags.rawname');
         $sql = "
             WITH matching_courses AS (
                 SELECT DISTINCT c.id
@@ -164,11 +164,18 @@ class external extends external_api {
                 AND ti.itemtype = 'course'
                 AND ti.component = 'core'
                 AND c.visible = 1
+            ),
+            coursetags AS (
+                SELECT DISTINCT ti.itemid AS courseid, t.id AS tagid, t.rawname
+                FROM {tag_instance} ti
+                JOIN {tag} t ON t.id = ti.tagid
+                WHERE ti.itemtype = 'course'
+                AND ti.component = 'core'
             )
             SELECT c.*, cc.name AS categoryname, $groupconcat as tagnames,
                    COUNT(DISTINCT ue.userid) AS enrolments,
                    COUNT(DISTINCT CASE
-                       WHEN t.id $tagidssql2 THEN t.id
+                       WHEN coursetags.tagid $tagidssql2 THEN coursetags.tagid
                    END) as matching_tags
             FROM {course} c
             JOIN matching_courses mc ON mc.id = c.id
@@ -177,11 +184,8 @@ class external extends external_api {
                 AND e.status = :enrolenabled
             LEFT JOIN {user_enrolments} ue ON ue.enrolid = e.id
                 AND ue.status = :userenrolactive
-            LEFT JOIN {tag_instance} ti ON ti.itemid = c.id
-                AND ti.itemtype = 'course'
-                AND ti.component = 'core'
-            LEFT JOIN {tag} t ON t.id = ti.tagid
-            GROUP BY c.id
+            LEFT JOIN coursetags ON coursetags.courseid = c.id
+            GROUP BY c.id, cc.name
             ORDER BY matching_tags DESC, c.timecreated DESC
             LIMIT 20
         ";
@@ -200,7 +204,7 @@ class external extends external_api {
     protected static function find_popular_courses() {
         global $DB;
 
-        $groupconcat = $DB->sql_group_concat('DISTINCT t.rawname');
+        $groupconcat = $DB->sql_group_concat('coursetags.rawname');
         $sql = "
             SELECT c.*, cc.name AS categoryname, $groupconcat AS tagnames,
                    COUNT(DISTINCT ue.userid) AS enrolments
@@ -210,13 +214,16 @@ class external extends external_api {
                    AND e.status = :enrolenabled
          LEFT JOIN {user_enrolments} ue ON ue.enrolid = e.id
                    AND ue.status = :userenrolactive
-         LEFT JOIN {tag_instance} ti ON ti.itemid = c.id
-                   AND ti.itemtype = 'course'
-                   AND ti.component = 'core'
-         LEFT JOIN {tag} t ON t.id = ti.tagid
+         LEFT JOIN (
+                   SELECT DISTINCT ti.itemid AS courseid, t.rawname
+                     FROM {tag_instance} ti
+                     JOIN {tag} t ON t.id = ti.tagid
+                    WHERE ti.itemtype = 'course'
+                      AND ti.component = 'core'
+                   ) coursetags ON coursetags.courseid = c.id
              WHERE c.visible = 1
                    AND c.id <> :siteid
-          GROUP BY c.id
+          GROUP BY c.id, cc.name
           ORDER BY enrolments DESC, c.timecreated DESC
         ";
 
