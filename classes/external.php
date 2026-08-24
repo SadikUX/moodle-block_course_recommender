@@ -79,7 +79,10 @@ class external extends external_api {
         $context = context_system::instance();
         $PAGE->set_context($context);
         self::validate_context($context);
-        require_capability('moodle/course:view', $context);
+
+        if (isguestuser()) {
+            throw new moodle_exception('noguest', 'error');
+        }
 
         $params = self::validate_parameters(self::get_courses_parameters(), [
             'interests' => $interests,
